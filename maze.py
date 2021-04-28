@@ -59,29 +59,30 @@ class Maze:
                     curr_position = _CellPosition(next_row, next_col)
                     break
 
-            for cords in [(curr_position.row, curr_position.col - 1), (curr_position.row, curr_position.col + 1),
-                          (curr_position.row + 1, curr_position.col), (curr_position.row, curr_position.col - 1)]:
-                (next_row, next_col) = cords
-                if self._maze_cells[next_row, next_col] == "x":
-                    self._mark_tried(curr_position.row, curr_position.col)
-                    curr_position.row, curr_position.col = next_row, next_col
-                    break
             else:
-                return False
+                for cords in [(curr_position.row, curr_position.col - 1), (curr_position.row, curr_position.col + 1),
+                            (curr_position.row + 1, curr_position.col), (curr_position.row, curr_position.col - 1)]:
+                    (next_row, next_col) = cords
+                    if self._maze_cells[next_row, next_col] == "x":
+                        self._mark_tried(curr_position.row, curr_position.col)
+                        curr_position.row, curr_position.col = next_row, next_col
+                        break
+                else:
+                    return False
 
         if (curr_position.row, curr_position.col) != (self._exit_cell.row, self._exit_cell.col):
             return True
 
     def reset(self):
         """Resets the maze by removing all "path" and "tried" tokens."""
-        for i in range(self.num_rows()):
-            for j in range(self.num_cols()):
-                if self._maze_cells[i, j] in ['x', 'o']:
-                    self._maze_cells[i, j] = None
+        for row in range(self.num_rows()):
+            for col in range(self.num_cols()):
+                if self._maze_cells[row, col] in ['x', 'o']:
+                    self._maze_cells[row, col] = None
 
     def __str__(self):
         """Returns a text-based representation of the maze."""
-        for row in range(self.num_rows() - 1):
+        for row in range(self.num_rows()):
             line = ''
             for col in range(self.num_cols()):
                 if self._maze_cells[row, col] is None:
@@ -89,14 +90,7 @@ class Maze:
                 else:
                     line += self._maze_cells[row, col] + " "
             print(line)
-
-        line = ''
-        for col in range(self.num_cols()):
-          if self._maze_cells[self.num_rows(), col] is None:
-            line += "  "
-        else:
-            line += self._maze_cells[self.num_rows(), col] + " "
-        return line
+        return "Done"
 
     def _valid_move(self, row, col):
         """Returns True if the given cell position is a valid move."""
